@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="container">
+  <h2>Seu Carrinho</h2>
+  <div id="carrinho"></div>
+  <a href="finalizar.html"><button>Finalizar Compra</button></a>
+  <a href="catalogo.html" class="link">Voltar ao Catálogo</a>
+
+  <script>
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || {};
+
+    fetch('https://fakestoreapi.com/products')
+      .then(res => res.json())
+      .then(produtos => {
+        const container = document.getElementById('carrinho');
+        let total = 0;
+
+        for (let id in carrinho) {
+          const produto = produtos.find(p => p.id == id);
+          const qtd = carrinho[id];
+          const subtotal = qtd * produto.price;
+          total += subtotal;
+
+          const item = document.createElement('div');
+          item.className = 'card carrinho-item';
+          item.innerHTML = `
+            <img src="${produto.image}" class="carrinho-img">
+            <div>
+              <p><strong>${produto.title}</strong></p>
+              <p>Quantidade: ${qtd}</p>
+              <p>Subtotal: R$ ${subtotal.toFixed(2)}</p>
+              <button onclick="remover(${id})">Remover</button>
+            </div>
+          `;
+          container.appendChild(item);
+        }
+
+        const totalEl = document.createElement('h3');
+        totalEl.innerText = `Total: R$ ${total.toFixed(2)}`;
+        container.appendChild(totalEl);
+      });
+
+    function remover(id) {
+      delete carrinho[id];
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      location.reload();
+    }
+  </script>
+</body>
+</html>

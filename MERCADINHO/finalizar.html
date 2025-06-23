@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="container">
+  <h2>Finalização da Compra</h2>
+  <form id="checkoutForm" class="card form">
+    <label>Método de Pagamento:</label>
+    <select id="pagamento" required>
+      <option value="">Selecione</option>
+      <option value="pix">PIX</option>
+      <option value="cartao">Cartão de Crédito</option>
+      <option value="boleto">Boleto</option>
+    </select>
+
+    <label>Opção de Entrega:</label>
+    <select id="entrega" required>
+      <option value="">Selecione</option>
+      <option value="padrao">Entrega Padrão (5-7 dias)</option>
+      <option value="expressa">Entrega Expressa (1-2 dias)</option>
+      <option value="retirada">Retirar na loja</option>
+    </select>
+
+    <button type="submit">Confirmar Pedido</button>
+  </form>
+
+  <script>
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const pagamento = document.getElementById('pagamento').value;
+      const entrega = document.getElementById('entrega').value;
+      alert(`Pedido confirmado!\nPagamento: ${pagamento}\nEntrega: ${entrega}`);
+      localStorage.removeItem('carrinho');
+      window.location.href = 'catalogo.html';
+    });
+  </script>
+</body>
+</html>

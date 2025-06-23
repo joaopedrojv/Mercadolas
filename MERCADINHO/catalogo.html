@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="container">
+  <h2>Catálogo de Produtos</h2>
+  <div id="produtos" class="produtos-grid"></div>
+  <a href="carrinho.html" class="link">Ir para o carrinho</a>
+
+  <script>
+    if (localStorage.getItem('logado') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    fetch('https://fakestoreapi.com/products')
+      .then(res => res.json())
+      .then(produtos => {
+        const container = document.getElementById('produtos');
+        produtos.forEach(prod => {
+          const card = document.createElement('div');
+          card.className = 'card produto';
+          card.innerHTML = `
+            <img src="${prod.image}" alt="${prod.title}" class="produto-img">
+            <h4>${prod.title}</h4>
+            <p><strong>R$ ${prod.price.toFixed(2)}</strong></p>
+            <p class="descricao">${prod.description}</p>
+            <button onclick="adicionar(${prod.id})">Adicionar ao carrinho</button>
+          `;
+          container.appendChild(card);
+        });
+      });
+
+    function adicionar(id) {
+      let carrinho = JSON.parse(localStorage.getItem('carrinho')) || {};
+      carrinho[id] = (carrinho[id] || 0) + 1;
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      alert("Produto adicionado!");
+    }
+  </script>
+</body>
+</html>
